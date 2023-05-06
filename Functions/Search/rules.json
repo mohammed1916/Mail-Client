@@ -1,0 +1,71 @@
+{
+    "rules": [
+        {
+            "predicate": "all",
+            "conditions": [
+                {
+                    "field": "From",
+                    "predicate": "equals",
+                    "value": "no-reply@accounts.google.com"
+                },
+                {
+                    "field": "Received Date/Time",
+                    "predicate": "greater than",
+                    "value": "10 months"
+                }
+            ],
+            "actions": [
+                {
+                    "type": "mark_as_read"
+                },
+                {
+                    "type": "move_to",
+                    "value": "CATEGORY_SOCIAL"
+                }
+            ]
+        },
+        {
+            "predicate": "all",
+            "conditions": [
+                {
+                    "field": "From",
+                    "predicate": "equals",
+                    "value": "no-reply@accounts.google.com"
+                }
+            ],
+            "actions": [
+                {
+                    "type": "mark_as_read"
+                },
+                {
+                    "type": "move_to",
+                    "value": "TRASH"
+                }
+            ]
+        },
+        {
+            "predicate": "any",
+            "conditions": [
+                {
+                    "field": "Subject",
+                    "predicate": "contains",
+                    "value": "urgent"
+                },
+                {
+                    "field": "Message",
+                    "predicate": "does not contain",
+                    "value": "unsubscribe"
+                }
+            ],
+            "actions": [
+                {
+                    "type": "mark_as_unread"
+                },
+                {
+                    "type": "move_to",
+                    "value": "CATEGORY_SOCIAL"
+                }
+            ]
+        }
+    ]
+}

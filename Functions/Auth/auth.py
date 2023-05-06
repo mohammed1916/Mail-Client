@@ -1,5 +1,6 @@
 import os
 import pickle
+import sys
 # Gmail API utils
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -20,13 +21,13 @@ our_email = 'samplesoftwaredemo@gmail.com'
 
 
 class Authenticate:
-    def gmail_authenticate():
+    def gmailAuthenticate():
         creds = None
         # the file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first time
-        cwd = os.getcwd()
+        cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
         datapath = cwd + "/Data/Credentials"
-        if os.path.exists(datapath+"token.pickle"):
+        if os.path.exists(datapath + "token.pickle"):
             with open("token.pickle", "rb") as token:
                 creds = pickle.load(token)
                 print("Credentails: ", creds)
