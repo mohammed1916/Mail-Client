@@ -20,26 +20,7 @@
                 },
                 {
                     "type": "move_to",
-                    "value": "CATEGORY_SOCIAL"
-                }
-            ]
-        },
-        {
-            "predicate": "all",
-            "conditions": [
-                {
-                    "field": "From",
-                    "predicate": "equals",
-                    "value": "no-reply@accounts.google.com"
-                }
-            ],
-            "actions": [
-                {
-                    "type": "mark_as_read"
-                },
-                {
-                    "type": "move_to",
-                    "value": "TRASH"
+                    "value": "CATEGORY_UPDATES"
                 }
             ]
         },
@@ -59,11 +40,11 @@
             ],
             "actions": [
                 {
-                    "type": "mark_as_unread"
+                    "type": "mark_as_read"
                 },
                 {
                     "type": "move_to",
-                    "value": "CATEGORY_SOCIAL"
+                    "value": "CATEGORY_PROMOTIONS"
                 }
             ]
         }

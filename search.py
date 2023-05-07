@@ -1,5 +1,7 @@
-from Functions.Search.main import Search
+from Functions.Search.search import Search
 from Functions.Auth.auth import Authenticate
+from global_var import ROOT
 
-service = Authenticate.gmailAuthenticate()
-Search(service).processMails()
+if __name__ == '__main__':
+    service = Authenticate.gmailAuthenticate()
+    Search(service, ROOT).processMails()

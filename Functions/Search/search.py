@@ -1,18 +1,16 @@
+import os
 from datetime import datetime, timedelta
 import json
-import os
 import re
 import sqlite3
-import sys
 
 
 class Search:
     # Iterate over messages and apply rules
-    def __init__(self, service):
+    def __init__(self, service, ROOT):
         self.service = service
         self.messages = []
-        dbPath = os.path.dirname(os.path.abspath(sys.argv[0])) + '/Data/DB/'
-        print(dbPath)
+        dbPath = ROOT + '/Data/DB/'
         self.conn = sqlite3.connect(dbPath + 'emails.db')
         self.cursor = self.conn.cursor()
         # load rules from JSON file
@@ -100,7 +98,7 @@ class Search:
             print('query:🚀', query)
             self.cursor.execute(query)
             results = self.cursor.fetchall()
-            print('results:✅', results)
+            print('results:✅', [r[2] for r in results])
 
             # Perform Action
             for action in ruleActions:
@@ -110,13 +108,11 @@ class Search:
                         result_id = result[0]
                         self.service.users().messages().modify(userId='me', id=result_id,
                                                                body={'removeLabelIds': ['UNREAD']}).execute()
-                        # self.cursor.execute('UPDATE emails SET is_read = ? WHERE id = ?', (1, result_id))
                 elif action['type'] == 'mark_unread':
                     for result in results:
                         result_id = result[0]
                         self.service.users().messages().modify(userId='me', id=result_id,
                                                                body={'addLabelIds': ['UNREAD']}).execute()
-                        # self.cursor.execute('UPDATE emails SET is_read = ? WHERE id = ?', (0, result_id))
                 elif action['type'].startswith('move'):
                     """
                     CHAT
@@ -148,11 +144,21 @@ class Search:
                         if label_id:
                             self.service.users().messages().modify(userId='me', id=result_id,
                                                                    body={'addLabelIds': [label_id]}).execute()
-                            # self.cursor.execute('UPDATE emails SET is_deleted = ? WHERE id = ?', (1, result_id))
                         else:
                             print(f'Error: Label "{label_name}" not found')
         self.conn.close()
 
 
-# if __name__ == '__main__':
-#     Search().processMails()
+if __name__ == '__main__':
+    import pickle
+    from googleapiclient.discovery import build
+    ROOT = os.path.dirname(os.path.dirname(
+        os.path.dirname(__file__)))
+    datapath = ROOT + "/Data/Credentials"
+    creds = None
+    if os.path.exists(datapath + "/token.pickle"):
+        with open(datapath + "/token.pickle", "rb") as token:
+            creds = pickle.load(token)
+            print("Credentails: 🔐", creds)
+    service = build('gmail', 'v1', credentials=creds)
+    Search(service, ROOT).processMails()
